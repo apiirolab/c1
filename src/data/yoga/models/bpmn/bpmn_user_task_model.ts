@@ -1,4 +1,4 @@
-import { BpmnProcessInstance } from 'data/yoga/models/bpmn_process_instance_model';
+import { BpmnProcessInstance, ProcessActionResult } from 'data/yoga/models/bpmn_process_instance_model';
 import { BoundaryEvent } from './bpmn_boundary_event_model';
 import { Lane } from './bpmn_lane_model';
 import { Task } from './bpmn_task_model';
@@ -8,15 +8,15 @@ export class UserTask extends Task {
     super(task, lane, attachedEvents);
   }
 
-  async execute(state: BpmnProcessInstance, context: ServerContext) {
+  async execute(state: BpmnProcessInstance, context: ServerContext, result: ProcessActionResult) {
     if (context.getUser()) {
-      /*const taskInstance = */ await context.db.mutation.createBpmnTaskInstance({
+      const taskInstanceDAO = await context.db.mutation.createBpmnTaskInstance({
         data: {
           // dateFinished: null,
           dateStarted: new Date(),
           // duration: null,
           // performerId: null,
-          snapshot: JSON.parse(JSON.stringify(state.resources)), // clone of properties (not of functions)
+          data: JSON.parse(JSON.stringify(state.resources)), // clone of properties (not of functions)
           taskId: this.id,
           // performerRoles: BpmnTaskInstanceCreateperformerRolesInput,
           performerRoles: {
@@ -35,6 +35,7 @@ export class UserTask extends Task {
           status: 'Waiting'
         }
       });
+      result.active.push(taskInstanceDAO.id);
     }
   }
 }

@@ -17,7 +17,7 @@ interface Options {
 async function clear(options: Options) {
   if (options.clear) {
     for (let key of options.clear) {
-      const pluralKey = 'deleteMany' + (key + (key[key.length - 1] === 's' ? 'es' : 's')); /*?*/
+      const pluralKey = 'deleteMany' + (key + (key[key.length - 1] === 's' ? 'es' : 's'));
       await (db.mutation as any)[pluralKey]({});
     }
   }

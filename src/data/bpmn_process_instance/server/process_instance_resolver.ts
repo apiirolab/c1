@@ -1,3 +1,4 @@
+import { ProcessInstanceItem } from 'client/modules/process/views/process_instance_item_view';
 import { FixtureContext, Mutation, Prisma, purge, Query, Yoga } from 'data/utils';
 import { BpmnProcessInstance } from '../../yoga/models/bpmn_process_instance_model';
 import { BpmnProcessModel } from '../../yoga/models/bpmn_process_model';
@@ -111,14 +112,43 @@ export const mutation: Mutation = {
     const processInstance = new BpmnProcessInstance(processInstanceDAO, bpmnProcessModel);
     return processInstance.start(ctx, role);
   },
-  // async duplicateProcessInstance(_parent, { input: { processId } }, ctx, info) {
-  //   // const processInstanceDAO = ctx.db.query.bpmnProcessInstance({
-  //   //   where: {
-  //   //     id: processId
-  //   //   }
-  //   // });
-  //   // const newProcessInstance = BpmnProcessInstance.duplicateInstance();
-  // },
+  async duplicateProcessInstance(_parent, { input: { processId } }, ctx, info) {
+    const processInstanceDAO = await ctx.db.query.bpmnProcessInstance({
+      where: {
+        id: processId
+      }
+    },
+      `{
+        id
+        comments
+        dataFinished
+        dateStarted
+        duration
+        owner
+        status
+        data
+        log
+        tasks
+        process {
+          id
+          access
+          actionCount
+          dataDescriptors
+          description
+          model
+          name
+          type
+          resources
+          status
+          version
+          versions
+        }
+      } `
+    );
+    const newProcessInstance = BpmnProcessInstance.duplicateInstance(processInstanceDAO);
+
+    return newProcessInstance;
+  },
   async setProcessInstanceStatus(_parent, { input: { processId, status } }, ctx) {
     const process = await ctx.db.mutation.updateBpmnProcessInstance({
       where: {
