@@ -41,7 +41,7 @@ export class UserTask extends Task {
               id: state.id
             }
           },
-          status: 'Waiting'
+          status: 'Started'
         }
       });
       result.active.push(taskInstanceDAO.id);
