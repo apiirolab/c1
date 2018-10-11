@@ -23,6 +23,7 @@ export class UserTask extends Task {
           // performerId: null,
           data: JSON.parse(JSON.stringify(state.resources)), // clone of properties (not of functions)
           taskId: this.id,
+          name: this.name,
           // performerRoles: BpmnTaskInstanceCreateperformerRolesInput,
           performerRoles: {
             set: this.lane.roles

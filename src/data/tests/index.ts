@@ -83,6 +83,7 @@ export async function its(
     context = {
       db,
       request: {},
+      response: {},
       userId: null,
       i18n: null,
       cache: null
