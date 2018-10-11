@@ -36,11 +36,11 @@ input LaunchProcessInstanceInput {
 }
 
 input DuplicateProcessInstanceInput {
-  processId: String!
+  processInstanceId: String!
 }
 
 input SetProcessInstanceStatusInput {
-  processId: String!
+  processInstanceId: String!
   status: BpmnProcessInstanceStatus!
 }
 

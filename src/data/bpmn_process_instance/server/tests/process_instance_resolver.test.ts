@@ -1,9 +1,10 @@
-import { create, its } from 'data/tests';
+import { create, its, testMockedResolver } from 'data/tests';
+import { BpmnProcessInstance } from '../../../yoga/models/bpmn_process_instance_model';
 import { BpmnProcessModel } from '../../../yoga/models/bpmn_process_model';
+
 import { mutation } from '../process_instance_resolver';
 
 describe('BpmnProcess', () => {
-  
   its(
     'launch process',
     {
@@ -17,48 +18,16 @@ describe('BpmnProcess', () => {
       const lane = { roles: [role], execute: jest.fn() };
       BpmnProcessModel.prototype.getElementList = () => [lane] as any;
       const process = await create.process(ctx, { name: 'Test Process' });
-      
+
       await mutation.launchProcessInstance(null, { input: { processId: process.id, role } }, ctx);
 
       expect(lane.execute).toHaveBeenCalled();
     }
   );
 
-  its(
-    'set process state',
-    {
-      clear: ['BpmnProcessInstance', 'BpmnProcess', 'Log'],
-      user: {
-        name: 'Dean'
-      }
-    },
-    async ctx => {
-      const process = await create.process(ctx, { name: 'Test Process' });
-
-      const pInstanceDAO = await mutation.setProcessInstanceStatus(null, { input: { processId: process.id, status: 'Finished' } }, ctx);
-
-      expect(pInstanceDAO.status.toEqual('Finished'));
-    }
-  );
-
-  its(
-    'set process state and updates task instances',
-    {
-      clear: ['BpmnProcessInstance', 'BpmnProcess', 'Log'],
-      user: {
-        name: 'Dean'
-      }
-    },
-    async ctx => {
-      // create task instances 
-      
-      // const process = await create.process(ctx, { name: 'Test Process' });
-
-      // const pInstanceDAO = await mutation.setProcessInstanceStatus(null, { input: { processId: process.id, status: 'Finished' } }, ctx);
-
-      // expect(pInstanceDAO.status.toEqual('Finished'));
-
-      // check if task instances status' have changed
-    }
-  );
+  its('set process state', {}, async _ctx => {
+    testMockedResolver(BpmnProcessInstance, 'setStatus', (args, context, info) => {
+      return mutation.setProcessInstanceStatus(null, args, context, info);
+    });
+  });
 });

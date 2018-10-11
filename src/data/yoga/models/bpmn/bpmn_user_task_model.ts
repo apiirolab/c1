@@ -9,7 +9,12 @@ export class UserTask extends Task {
   }
 
   async execute(state: BpmnProcessInstance, context: ServerContext, result: ProcessActionResult) {
-    if (context.getUser()) {
+    
+    const user = await context.getUser();
+    
+    console.log(user);
+
+    if (user) {
       const taskInstanceDAO = await context.db.mutation.createBpmnTaskInstance({
         data: {
           // dateFinished: null,
@@ -36,6 +41,8 @@ export class UserTask extends Task {
         }
       });
       result.active.push(taskInstanceDAO.id);
+    } else {
+      throw new Error('Creating New User Task: No User');
     }
   }
 }

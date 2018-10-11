@@ -3,7 +3,7 @@ import { create, its } from 'data/tests';
 import { query } from '../bpmn_process_resolver'; 
 
 describe('Bpmn Process Resolver', () => {
-  its('fails', { clear: ['BpmnProcess'] }, async context => {
+  its('fails', { clear: ['BpmnProcessInstance', 'BpmnProcess'] }, async context => {
     await create.process(
       context,
       { status: 'Published', name: 'Process 1' },

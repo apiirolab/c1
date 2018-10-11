@@ -1,5 +1,4 @@
-import { ProcessInstanceItem } from 'client/modules/process/views/process_instance_item_view';
-import { FixtureContext, Mutation, Prisma, purge, Query, Yoga } from 'data/utils';
+import { FixtureContext, Mutation, purge, Query, Yoga } from 'data/utils';
 import { BpmnProcessInstance } from '../../yoga/models/bpmn_process_instance_model';
 import { BpmnProcessModel } from '../../yoga/models/bpmn_process_model';
 
@@ -112,10 +111,10 @@ export const mutation: Mutation = {
     const processInstance = new BpmnProcessInstance(processInstanceDAO, bpmnProcessModel);
     return processInstance.start(ctx, role);
   },
-  async duplicateProcessInstance(_parent, { input: { processId } }, ctx, info) {
+  async duplicateProcessInstance(_parent, { input: { processInstanceId } }, ctx, info) {
     const processInstanceDAO = await ctx.db.query.bpmnProcessInstance({
       where: {
-        id: processId
+        id: processInstanceId
       }
     },
       `{
@@ -149,56 +148,8 @@ export const mutation: Mutation = {
 
     return newProcessInstance;
   },
-  async setProcessInstanceStatus(_parent, { input: { processId, status } }, ctx) {
-    const process = await ctx.db.mutation.updateBpmnProcessInstance({
-      where: {
-        id: processId
-      },
-      data: {
-        status
-      }
-    });
-
-    // update all taskInstances of this process
-    const taskInstances = await ctx.db.query.bpmnTaskInstances({
-      where: {
-        processInstance: {
-          id: processId
-        }
-      }
-    });
-
-    if (taskInstances) {
-      let newTaskInstanceStatus: Prisma.BpmnTaskInstanceStatus;
-
-      switch (status) {
-        case 'Running':
-          newTaskInstanceStatus = 'Waiting';
-          break;
-        case 'Paused':
-          newTaskInstanceStatus = 'Paused';
-          break;
-        case 'Aborted':
-          newTaskInstanceStatus = 'Aborted';
-          break;
-        case 'Finished':
-          newTaskInstanceStatus = 'Finished';
-          break;
-      }
-
-      taskInstances.forEach(async (taskInstance: Prisma.BpmnTaskInstance) => {
-        await ctx.db.mutation.updateBpmnTaskInstance({
-          where: {
-            id: taskInstance.id
-          },
-          data: {
-            status: newTaskInstanceStatus
-          }
-        });
-      });
-    }
-
-    return process;
+  async setProcessInstanceStatus(_parent, { input }, ctx, info) {
+    return BpmnProcessInstance.setStatus(ctx, input, info);
   }
 };
 

@@ -4,7 +4,7 @@ describe('BpmnProcessModel', () => {
   its(
     'has processes',
     {
-      clear: ['BpmnProcess']
+      clear: ['BpmnProcessInstance', 'BpmnProcess']
     },
     async _ctx => {
       // const m = await ctx.db.query.bpmnProcesses({});

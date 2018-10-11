@@ -119,7 +119,7 @@ const defaultDescriptor: Yoga.DataDescriptor = {
 
 const defaultBpmnProcessInstance: Prisma.BpmnProcessInstanceCreateInput = {
   comments: null,
-  data: null,
+  data: {},
   dateFinished: finishedDate,
   dateStarted: createdDate,
   duration: 0,
@@ -243,5 +243,6 @@ export const create = {
     return ctx.db.mutation.createBpmnProcessInstance({
       data: { ...defaultBpmnProcessInstance, ...data }
     });
-  }
+  },
+
 };
