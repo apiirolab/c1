@@ -1,5 +1,5 @@
 # source: http://localhost:4466
-# timestamp: Fri Oct 05 2018 17:11:55 GMT+1000 (Australian Eastern Standard Time)
+# timestamp: Wed Oct 17 2018 11:43:18 GMT+1100 (AUS Eastern Summer Time)
 
 type Access implements Node {
   id: ID!
@@ -2115,6 +2115,7 @@ type Comment implements Node {
   user(where: UserWhereInput): User!
   date: DateTime!
   replyTo: String
+  resourceId: ID
 }
 
 """A connection to a list of items."""
@@ -2131,6 +2132,7 @@ input CommentCreateInput {
   text: String!
   date: DateTime!
   replyTo: String
+  resourceId: ID
   user: UserCreateOneInput!
 }
 
@@ -2157,6 +2159,8 @@ enum CommentOrderByInput {
   date_DESC
   replyTo_ASC
   replyTo_DESC
+  resourceId_ASC
+  resourceId_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -2168,6 +2172,7 @@ type CommentPreviousValues {
   text: String!
   date: DateTime!
   replyTo: String
+  resourceId: ID
 }
 
 type CommentSubscriptionPayload {
@@ -2213,6 +2218,7 @@ input CommentUpdateDataInput {
   text: String
   date: DateTime
   replyTo: String
+  resourceId: ID
   user: UserUpdateOneInput
 }
 
@@ -2220,6 +2226,7 @@ input CommentUpdateInput {
   text: String
   date: DateTime
   replyTo: String
+  resourceId: ID
   user: UserUpdateOneInput
 }
 
@@ -2394,6 +2401,46 @@ input CommentWhereInput {
 
   """All values not ending with the given string."""
   replyTo_not_ends_with: String
+  resourceId: ID
+
+  """All values that are not equal to given value."""
+  resourceId_not: ID
+
+  """All values that are contained in given list."""
+  resourceId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  resourceId_not_in: [ID!]
+
+  """All values less than the given value."""
+  resourceId_lt: ID
+
+  """All values less than or equal the given value."""
+  resourceId_lte: ID
+
+  """All values greater than the given value."""
+  resourceId_gt: ID
+
+  """All values greater than or equal the given value."""
+  resourceId_gte: ID
+
+  """All values containing the given string."""
+  resourceId_contains: ID
+
+  """All values not containing the given string."""
+  resourceId_not_contains: ID
+
+  """All values starting with the given string."""
+  resourceId_starts_with: ID
+
+  """All values not starting with the given string."""
+  resourceId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  resourceId_ends_with: ID
+
+  """All values not ending with the given string."""
+  resourceId_not_ends_with: ID
   user: UserWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_every: BpmnProcessInstanceWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_some: BpmnProcessInstanceWhereInput

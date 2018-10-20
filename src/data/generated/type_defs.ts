@@ -23,10 +23,12 @@ type Mutation {
   createProcess(input: CreateProcessInput!): BpmnProcess
   launchProcessInstance(input: LaunchProcessInstanceInput!): BpmnProcessInstanceOutput
   duplicateProcessInstance(input: DuplicateProcessInstanceInput!): BpmnProcessInstanceOutput
-  setProcessInstanceStatus(input: SetProcessInstanceStatusInput!): BpmnProcessInstanceOutput
-  createTaskInstance(input: CreateTaskInstanceInput!): BpmnTaskInstance
+  abortProcessInstance(input: AbortProcessInstanceInput!): BpmnProcessInstance
+  pauseProcessInstance(input: PauseProcessInstanceInput!): BpmnProcessInstance
+  addComment(input: AddCommentInput!): BpmnProcessInstance
   updateTaskInstanceStatus(input: UpdateTaskInstanceStatusInput!): BpmnTaskInstance
-  submitForm(input: SubmitFormInput!): BpmnTaskInstance
+  submitTask(input: SubmitTaskInput!): BpmnTaskInstance
+  saveForm(input: SaveFormInput!): BpmnTaskInstance
   login(input: AuthInput!): AuthPayload!
   signup(input: AuthInput!): AuthPayload!
 }
@@ -182,28 +184,35 @@ input LaunchProcessInstanceInput {
 }
 
 input DuplicateProcessInstanceInput {
-  processId: String!
-}
-
-input SetProcessInstanceStatusInput {
-  processId: String!
-  status: BpmnProcessInstanceStatus!
-}
-
-input CreateTaskInstanceInput {
   processInstanceId: String!
-  taskId: String!
-  performerRoles: [String!]!
+}
+
+input AbortProcessInstanceInput {
+  processInstanceId: String!
+}
+
+input PauseProcessInstanceInput {
+  processInstanceId: String!
+}
+
+input AddCommentInput {
+  processInstanceId: String!
+  comment: String!
+  replyTo: String
 }
 
 input UpdateTaskInstanceStatusInput {
-  taskId: String!
+  taskInstanceId: String!
   status: BpmnTaskInstanceStatus!
 }
 
-input SubmitFormInput {
-  taskId: String!
-  form: [String!]!
+input SubmitTaskInput {
+  taskInstanceId: String!
+}
+
+input SaveFormInput {
+  taskInstanceId: String!
+  data: Json
 }
 
 input AuthInput {
@@ -1891,6 +1900,7 @@ type Comment implements Node {
   user(where: UserWhereInput): User!
   date: DateTime!
   replyTo: String
+  resourceId: ID
 }
 
 input CommentWhereInput {
@@ -2094,6 +2104,59 @@ input CommentWhereInput {
   All values not ending with the given string.
   """
   replyTo_not_ends_with: String
+  resourceId: ID
+  """
+  All values that are not equal to given value.
+  """
+  resourceId_not: ID
+  """
+  All values that are contained in given list.
+  """
+  resourceId_in: [ID!]
+  """
+  All values that are not contained in given list.
+  """
+  resourceId_not_in: [ID!]
+  """
+  All values less than the given value.
+  """
+  resourceId_lt: ID
+  """
+  All values less than or equal the given value.
+  """
+  resourceId_lte: ID
+  """
+  All values greater than the given value.
+  """
+  resourceId_gt: ID
+  """
+  All values greater than or equal the given value.
+  """
+  resourceId_gte: ID
+  """
+  All values containing the given string.
+  """
+  resourceId_contains: ID
+  """
+  All values not containing the given string.
+  """
+  resourceId_not_contains: ID
+  """
+  All values starting with the given string.
+  """
+  resourceId_starts_with: ID
+  """
+  All values not starting with the given string.
+  """
+  resourceId_not_starts_with: ID
+  """
+  All values ending with the given string.
+  """
+  resourceId_ends_with: ID
+  """
+  All values not ending with the given string.
+  """
+  resourceId_not_ends_with: ID
   user: UserWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_every: BpmnProcessInstanceWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_some: BpmnProcessInstanceWhereInput
@@ -2109,6 +2172,8 @@ enum CommentOrderByInput {
   date_DESC
   replyTo_ASC
   replyTo_DESC
+  resourceId_ASC
+  resourceId_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -3409,6 +3474,7 @@ type CommentPreviousValues {
   text: String!
   date: DateTime!
   replyTo: String
+  resourceId: ID
 }
 
 """

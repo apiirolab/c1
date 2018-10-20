@@ -2368,6 +2368,7 @@ type Comment implements Node {
   user(where: UserWhereInput): User!
   date: DateTime!
   replyTo: String
+  resourceId: ID
 }
 
 """A connection to a list of items."""
@@ -2384,6 +2385,7 @@ input CommentCreateInput {
   text: String!
   date: DateTime!
   replyTo: String
+  resourceId: ID
   user: UserCreateOneInput!
 }
 
@@ -2410,6 +2412,8 @@ enum CommentOrderByInput {
   date_DESC
   replyTo_ASC
   replyTo_DESC
+  resourceId_ASC
+  resourceId_DESC
   updatedAt_ASC
   updatedAt_DESC
   createdAt_ASC
@@ -2421,6 +2425,7 @@ type CommentPreviousValues {
   text: String!
   date: DateTime!
   replyTo: String
+  resourceId: ID
 }
 
 type CommentSubscriptionPayload {
@@ -2466,6 +2471,7 @@ input CommentUpdateDataInput {
   text: String
   date: DateTime
   replyTo: String
+  resourceId: ID
   user: UserUpdateOneInput
 }
 
@@ -2473,6 +2479,7 @@ input CommentUpdateInput {
   text: String
   date: DateTime
   replyTo: String
+  resourceId: ID
   user: UserUpdateOneInput
 }
 
@@ -2647,6 +2654,46 @@ input CommentWhereInput {
 
   """All values not ending with the given string."""
   replyTo_not_ends_with: String
+  resourceId: ID
+
+  """All values that are not equal to given value."""
+  resourceId_not: ID
+
+  """All values that are contained in given list."""
+  resourceId_in: [ID!]
+
+  """All values that are not contained in given list."""
+  resourceId_not_in: [ID!]
+
+  """All values less than the given value."""
+  resourceId_lt: ID
+
+  """All values less than or equal the given value."""
+  resourceId_lte: ID
+
+  """All values greater than the given value."""
+  resourceId_gt: ID
+
+  """All values greater than or equal the given value."""
+  resourceId_gte: ID
+
+  """All values containing the given string."""
+  resourceId_contains: ID
+
+  """All values not containing the given string."""
+  resourceId_not_contains: ID
+
+  """All values starting with the given string."""
+  resourceId_starts_with: ID
+
+  """All values not starting with the given string."""
+  resourceId_not_starts_with: ID
+
+  """All values ending with the given string."""
+  resourceId_ends_with: ID
+
+  """All values not ending with the given string."""
+  resourceId_not_ends_with: ID
   user: UserWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_every: BpmnProcessInstanceWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_some: BpmnProcessInstanceWhereInput
@@ -7424,6 +7471,8 @@ export type CommentOrderByInput =   'id_ASC' |
   'date_DESC' |
   'replyTo_ASC' |
   'replyTo_DESC' |
+  'resourceId_ASC' |
+  'resourceId_DESC' |
   'updatedAt_ASC' |
   'updatedAt_DESC' |
   'createdAt_ASC' |
@@ -8045,6 +8094,20 @@ export interface CommentWhereInput {
   replyTo_not_starts_with?: String
   replyTo_ends_with?: String
   replyTo_not_ends_with?: String
+  resourceId?: ID_Input
+  resourceId_not?: ID_Input
+  resourceId_in?: ID_Input[] | ID_Input
+  resourceId_not_in?: ID_Input[] | ID_Input
+  resourceId_lt?: ID_Input
+  resourceId_lte?: ID_Input
+  resourceId_gt?: ID_Input
+  resourceId_gte?: ID_Input
+  resourceId_contains?: ID_Input
+  resourceId_not_contains?: ID_Input
+  resourceId_starts_with?: ID_Input
+  resourceId_not_starts_with?: ID_Input
+  resourceId_ends_with?: ID_Input
+  resourceId_not_ends_with?: ID_Input
   user?: UserWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_every?: BpmnProcessInstanceWhereInput
   _MagicalBackRelation_BpmnProcessInstanceToComment_some?: BpmnProcessInstanceWhereInput
@@ -8602,6 +8665,7 @@ export interface CommentUpdateDataInput {
   text?: String
   date?: DateTime
   replyTo?: String
+  resourceId?: ID_Input
   user?: UserUpdateOneInput
 }
 
@@ -8865,6 +8929,7 @@ export interface CommentCreateInput {
   text: String
   date: DateTime
   replyTo?: String
+  resourceId?: ID_Input
   user: UserCreateOneInput
 }
 
@@ -10344,6 +10409,7 @@ export interface CommentUpdateInput {
   text?: String
   date?: DateTime
   replyTo?: String
+  resourceId?: ID_Input
   user?: UserUpdateOneInput
 }
 
@@ -10922,6 +10988,7 @@ export interface CommentPreviousValues {
   text: String
   date: DateTime
   replyTo?: String
+  resourceId?: ID_Output
 }
 
 /*
@@ -11194,6 +11261,7 @@ export interface Comment extends Node {
   user: User
   date: DateTime
   replyTo?: String
+  resourceId?: ID_Output
 }
 
 /*

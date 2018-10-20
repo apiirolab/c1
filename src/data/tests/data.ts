@@ -130,6 +130,25 @@ const defaultBpmnProcessInstance: Prisma.BpmnProcessInstanceCreateInput = {
   tasks: null
 };
 
+const defaultBpmnTaskInstance: Prisma.BpmnTaskInstanceCreateInput = {
+  dateFinished: null,
+  dateStarted: createdDate,
+  duration: 0,
+  data: null,
+  status: 'Started',
+  performerRoles: null,
+  performer: null,
+  processInstance: null,
+  task: null
+};
+
+const defaultBpmnTask: Prisma.BpmnTaskCreateInput = {
+  taskId: 'task1',
+  name: 'taskName',
+  type: null,
+  resources: null
+};
+
 // const defaultAccessCondition = TestData.defaultAccessCondition;
 const createAccessCondition: Prisma.AccessConditionCreateManyInput = {
   create: []
@@ -242,6 +261,16 @@ export const create = {
   bpmnProcessInstance(ctx: Context, data: Partial<Prisma.BpmnProcessInstanceCreateInput> = {}) {
     return ctx.db.mutation.createBpmnProcessInstance({
       data: { ...defaultBpmnProcessInstance, ...data }
+    });
+  },
+  bpmnTaskInstance(ctx: Context, data: Partial<Prisma.BpmnTaskInstanceCreateInput> = {}) {
+    return ctx.db.mutation.createBpmnTaskInstance({
+      data: { ...defaultBpmnTaskInstance, ...data }
+    });
+  },
+  bpmnTask(ctx: Context, data: Partial<Prisma.BpmnTaskCreateInput> = {}) {
+    return ctx.db.mutation.createBpmnTask({
+      data: { taskId: 't', name: 'taskName' }// ...defaultBpmnTask, ...data }
     });
   },
 
