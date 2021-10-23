@@ -1,0 +1,6 @@
+type Organisation {
+  id: ID! @unique
+  members: String!
+  goal: String
+  anthem: String!
+}
